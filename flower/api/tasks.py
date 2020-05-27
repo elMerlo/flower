@@ -501,6 +501,8 @@ List tasks
 :query workername: filter task by workername
 :query taskname: filter tasks by taskname
 :query state: filter tasks by state
+:query search: filter tasks using tasks filtering (https://flower.readthedocs.io/en/latest/tasks_filter.html)
+:query sort: sort tasks - prepend - (minus sign) for descending sorting
 :query received_start: filter tasks by received date (must be greater than) format %Y-%m-%d %H:%M
 :query received_end: filter tasks by received date (must be less than) format %Y-%m-%d %H:%M
 :reqheader Authorization: optional OAuth token to authenticate
@@ -512,6 +514,8 @@ List tasks
         worker = self.get_argument('workername', None)
         type = self.get_argument('taskname', None)
         state = self.get_argument('state', None)
+        search = self.get_argument('search', None)
+        sort = self.get_argument('sort', None)
         received_start = self.get_argument('received_start', None)
         received_end = self.get_argument('received_end', None)
 
@@ -525,7 +529,8 @@ List tasks
                 app.events, limit=limit, type=type,
                 worker=worker, state=state,
                 received_start=received_start,
-                received_end=received_end):
+                received_end=received_end,
+                search=search, sort_by=sort):
             task = tasks.as_dict(task)
             task.pop('worker', None)
             result.append((task_id, task))
